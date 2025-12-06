@@ -26,7 +26,7 @@ DEBUG = True
 
 APPEND_SLASH = False
 
-ALLOWED_HOSTS = ['api.blackwilbur.com','145.223.22.231','blackwilbur.com', 'localhost', '127.0.0.1','mercury-uat.phonepe.com']
+ALLOWED_HOSTS = ['api.blackwilbur.com','145.223.22.231','blackwilbur.com', '103.180.163.123', '127.0.0.1','mercury-uat.phonepe.com', 'localhost', 'localhost:8000']
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework_simplejwt',
-    'rest_framework',  
+    'rest_framework',
     'corsheaders',
     'backend',
     ]
@@ -82,7 +82,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / 'templates', 
+            BASE_DIR / 'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -100,9 +100,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'maysam',
-        'USER': 'root',  # Update with your MySQL username
-        'PASSWORD': '',  # Update with your MySQL password
-        'HOST': 'localhost',
+        'USER': 'maysam_user',  # Update with your MySQL username
+        'PASSWORD': 'P@ssw0rd2025!',  # Update with your MySQL password
+        'HOST': '103.180.163.123',
         'PORT': '3306',
     }
 }
