@@ -8,7 +8,7 @@ def main():
     """Run administrative tasks."""
     # Add the parent directory to sys.path to make 'backend' importable
     sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
     import django
     django.setup()
     try:
