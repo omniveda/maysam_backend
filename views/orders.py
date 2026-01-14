@@ -63,6 +63,32 @@ class OrdersAPIView(APIView):
                 "zipcode": shipping_address.zipcode if shipping_address else None,
                 "country": shipping_address.country if shipping_address else None,
             }
+            # Fetch payment details
+            payment_info = {
+                "status": "Pending",
+                "method": order.payment_method, # Default to order's payment method
+                "razorpay_order_id": None,
+                "razorpay_payment_id": None,
+                "amount_paid": None
+            }
+
+            try:
+                # PaymentOrder.id is a UUID, but order.order_id is a string
+                payment_order = models.PaymentOrder.objects.filter(id=order.order_id).first()
+                if payment_order:
+                    payment_info['status'] = payment_order.status
+                    payment_info['razorpay_order_id'] = payment_order.razorpay_order_id
+                    
+                    # Fetch detailed payment record if exists
+                    payment_record = models.Payment.objects.filter(order=payment_order).first()
+                    if payment_record:
+                        payment_info['razorpay_payment_id'] = payment_record.razorpay_payment_id
+                        payment_info['method'] = payment_record.payment_method
+                        payment_info['status'] = payment_record.payment_status # Use specific payment status
+                        payment_info['amount_paid'] = str(payment_record.amount)
+            except Exception as e:
+                print(f"Error fetching payment info for order {order.order_id}: {e}")
+
             order_data = {
                 "user_name": user_name,
                 "phone_number": order.phone_number,
@@ -75,7 +101,8 @@ class OrdersAPIView(APIView):
                 "tax_amount": str(order.tax_amount),
                 "total_amount": str(order.total_amount),
                 "shipping_address": shipping_address_data,
-                "items": items_data
+                "items": items_data,
+                "payment_details": payment_info
             }
             orders_data.append(order_data)
 
@@ -175,6 +202,12 @@ class OrdersAPIView(APIView):
 
                 product_variation = models.ProductVariation.objects.get(
                     id=product_variation_id)
+                
+                if product_variation.quantity < quantity:
+                    return Response({
+                        "error": f"Insufficient stock for product variation {product_variation.id}. Available: {product_variation.quantity}, Requested: {quantity}"
+                    }, status=status.HTTP_400_BAD_REQUEST)
+
                 product_variation.quantity -= quantity
                 product_variation.save()
 

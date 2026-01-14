@@ -80,13 +80,13 @@ class CollectionsSerializer(ModelSerializer):
         return None
 
 class ProductAdminSerializer(ModelSerializer):
-    category = SerializerMethodField()
     class Meta:
         model = models.Product
         fields = ['id', 'name', 'description', 'category', 'price', 'image']
 
-    def get_category(self, instance):
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
         if instance.category:
-            # Instead of returning the full serializer, return the category name
-            return instance.category.name  # Assuming `name` is the field you want
-        return None
+            # Return the category name instead of ID for frontend compatibility
+            representation['category'] = instance.category.name
+        return representation

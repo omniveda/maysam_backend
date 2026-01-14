@@ -120,7 +120,7 @@ class ProductManageAPIView(APIView):
         # Retrieve the category object
         try:
             category = models.Category.objects.get(id=category_id)
-        except serializers.Category.DoesNotExist:
+        except models.Category.DoesNotExist:
             return Response({"error": "Invalid category_id"}, status=status.HTTP_400_BAD_REQUEST)
 
         # Get image file from the request

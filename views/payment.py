@@ -38,6 +38,8 @@ class CreateRazorpayOrderView(APIView):
 
             # Initialize Razorpay client
             logger.debug(f"Initializing Razorpay client with key: {settings.RAZORPAY_KEY_ID}")
+            print(f"DEBUG: Using Razorpay Key: {settings.RAZORPAY_KEY_ID}")
+            print(f"DEBUG: Using Razorpay Secret (first 4 chars): {settings.RAZORPAY_KEY_SECRET[:4] if settings.RAZORPAY_KEY_SECRET else 'None'}")
             client = razorpay.Client(
                 auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
             )
